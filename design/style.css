@@ -13,29 +13,52 @@
   src: url(Heebo-Regular.ttf);
 }
 
+@font-face {
+  font-family: Heebo;
+  src: url(Heebo-VariableFont_wght.ttf);
+}
+
 body {
   direction: rtl;
   font-family: Heebo-Regular;
+  margin: 0;
+  padding: 0;
 }
 
-.answer-card {
+.card {
   page-break-before: always;
   position: relative;
   height: 90mm;
-  width: 60mm;
+  width: 60.2mm;
 }
 
-.answer-card p {
+.question {
+  background: black;
+  color: white;
+}
+
+p {
   position: absolute;
-  top: -3mm;
-  right: 5mm;
-  font-size: 30px;
+  top: -2.5mm;
+  right: 6mm;
+  font-size: 25px;
+  margin-left: 6mm;
+  line-height: 1;
+}
+
+.card-back-title {
+  top: -6.3mm !important;
+  font-family: Heebo;
+  letter-spacing: -3px !important;
+  line-height: 0.9 !important;
+  font-weight: 600;
+  font-size: 45px;
 }
 
 img {
   content: url(default.png);
-  width: 15mm;
+  width: 12mm;
   position: absolute;
-  bottom: -17mm;
+  bottom: 5mm;
   right: 5mm;
 }
