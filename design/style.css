@@ -7,9 +7,10 @@
   }
 }
 **/
+
 @font-face {
   font-family: Heebo-Regular;
-  src: url(C:/Users/yuval/desktop/CardsAgainstTheMafia/design/Heebo-Regular.ttf);
+  src: url(Heebo-Regular.ttf);
 }
 
 body {
@@ -18,17 +19,23 @@ body {
 }
 
 .answer-card {
-  width: 100vw;
-  height: 100vh;
-  display: block;
+  page-break-before: always;
   position: relative;
+  height: 90mm;
+  width: 60mm;
 }
 
 .answer-card p {
+  position: absolute;
+  top: -3mm;
+  right: 5mm;
   font-size: 30px;
 }
 
-p::after {
-  content: url(C:/Users/yuval/desktop/CardsAgainstTheMafia/design/default.png);
-  float: bottom;
+img {
+  content: url(default.png);
+  width: 15mm;
+  position: absolute;
+  bottom: -17mm;
+  right: 5mm;
 }
