@@ -1,0 +1,41 @@
+/**
+@media print {
+  body {
+    width: 29.7cm;
+    height: 21cm;
+    margin: 30mm 45mm 30mm 45mm;
+  }
+}
+**/
+
+@font-face {
+  font-family: Heebo-Regular;
+  src: url(Heebo-Regular.ttf);
+}
+
+body {
+  direction: rtl;
+  font-family: Heebo-Regular;
+}
+
+.answer-card {
+  page-break-before: always;
+  position: relative;
+  height: 90mm;
+  width: 60mm;
+}
+
+.answer-card p {
+  position: absolute;
+  top: -3mm;
+  right: 5mm;
+  font-size: 30px;
+}
+
+img {
+  content: url(default.png);
+  width: 15mm;
+  position: absolute;
+  bottom: -17mm;
+  right: 5mm;
+}

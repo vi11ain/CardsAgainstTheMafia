@@ -1,0 +1,34 @@
+/**
+@media print {
+  body {
+    width: 29.7cm;
+    height: 21cm;
+    margin: 30mm 45mm 30mm 45mm;
+  }
+}
+**/
+@font-face {
+  font-family: Heebo-Regular;
+  src: url(C:/Users/yuval/desktop/CardsAgainstTheMafia/design/Heebo-Regular.ttf);
+}
+
+body {
+  direction: rtl;
+  font-family: Heebo-Regular;
+}
+
+.answer-card {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  position: relative;
+}
+
+.answer-card p {
+  font-size: 30px;
+}
+
+p::after {
+  content: url(C:/Users/yuval/desktop/CardsAgainstTheMafia/design/default.png);
+  float: bottom;
+}
