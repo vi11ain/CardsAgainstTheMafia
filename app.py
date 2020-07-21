@@ -39,6 +39,19 @@ def generate_front_answers(doc, answers):
             doc.asis('<img src="default.png"/>')
 
 
+def calcSize(i, question):
+    area = question[:i]
+    area = area.replace('\n', '')
+    length = len(area) % 19
+    if length >= 15:
+        return 20
+    elif length >= 10:
+        return 50
+    elif length >= 6:
+        return 75
+    return 100
+
+
 def generate_front_questions(doc, questions):
     close_span_flag = False
     for question in questions:
@@ -50,10 +63,12 @@ def generate_front_questions(doc, questions):
                 else:
                     if question[i] == '_':
                         if i == len(question)-1 or question[i+1] not in NOWRAPFORME:
-                            doc.asis('<span class="placeholder"></span>')
+                            doc.asis(
+                                f'<span class="placeholder" style="width: {calcSize(i,question)}px;"></span>')
                         else:
                             with doc.tag('span', klass='nowrap'):
-                                doc.asis('<span class="placeholder">')
+                                doc.asis(
+                                    f'<span class="placeholder" style="width: {calcSize(i,question)}px;">')
                                 close_span_flag = True
                     elif question[i] == '\n':
                         doc.asis('<br>')
