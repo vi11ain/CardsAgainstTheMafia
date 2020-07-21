@@ -1,41 +1,100 @@
 import pdfkit
+import csv
 from yattag import Doc
+from functools import partial
 
-with open('answers.txt', encoding='utf-8') as f:
-    answers = f.readlines()
+NOWRAPFORME = ',.?!'
+WBRNOTFORME = ' םןךאבגדהוזחטיכלמנסעפצקרשתץף'
 
-with open('questions.txt', encoding='utf-8') as f:
-    questions = f.readlines()
 
-doc, tag, text = Doc().tagtext()
-doc.asis('<!DOCTYPE html>')
-with tag('html'):
-    with tag('head'):
-        doc.asis('<link rel="stylesheet" href="style.css"/>')
-    with tag('body'):
-        # Answer cards back
-        with tag('div', klass='card'):
-            with tag('p', klass='card-back-title'):
-                text('קלפים נגד המאפיה')
-        # Answer cards front
-        for answer in answers:
-            with tag('div', klass='card'):
-                with tag('p'):
-                    text(answer)
-                doc.asis('<img src="default.png"/>')
-        # Question cards back
-        with tag('div', klass='card question'):
-            with tag('p', klass='card-back-title'):
-                text('קלפים נגד המאפיה')
-        # Question cards front
-        for question in questions:
-            with tag('div', klass='card question'):
-                with tag('p'):
-                    text(question)
-                doc.asis('<img src="default.png"/>')
+def load_cards(filename, dest):
+    with open(filename, encoding='utf-8-sig') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if len(row) != 1:
+                row = list(filter(None, row))
+            if len(row) == 1:
+                dest.append(row[0])
+            elif len(row) == 0:
+                continue
+            else:
+                raise ValueError("PROBLEM ENCOUNTERED!")
 
-with open('design/index.html', 'w+', encoding='utf-8') as f:
-    f.write(doc.getvalue())
 
-pdfkit.from_file('design\\index.html', 'out.pdf', options={'--zoom': 1.261, '--margin-bottom': '0', '--margin-top': '0', '--margin-left': '0',
-                                                           '--margin-right': '0', '--enable-local-file-access': None, '--page-width': '60mm', '--page-height': '90mm', '--encoding': 'utf-8'})
+def generate_back(doc, isQuestions):
+    black = " black" if isQuestions else ""
+
+    with doc.tag('div', klass="card title"+black):
+        doc.text("קלפים")
+        doc.stag('br')
+        doc.text("נגד")
+        doc.stag('br')
+        doc.text("המאפיה")
+
+
+def generate_front_answers(doc, answers):
+    for answer in answers:
+        with doc.tag('div', klass='card'):
+            doc.text(answer)
+            doc.asis('<img src="default.png"/>')
+
+
+def generate_front_questions(doc, questions):
+    close_span_flag = False
+    for question in questions:
+        with doc.tag('div', klass='card black'):
+            for i in range(len(question)):
+                if(close_span_flag):
+                    doc.asis(f'{question[i]}</span>')
+                    close_span_flag = False
+                else:
+                    if question[i] == '_':
+                        if i == len(question)-1 or question[i+1] not in NOWRAPFORME:
+                            doc.asis('<span class="placeholder"></span>')
+                        else:
+                            with doc.tag('span', klass='nowrap'):
+                                doc.asis('<span class="placeholder">')
+                                close_span_flag = True
+                    elif question[i] == '\n':
+                        doc.asis('<br>')
+                    else:
+                        if i != len(question)-1:
+                            if question[i] not in WBRNOTFORME and question[i+1] == '_':
+                                doc.asis('<wbr>')
+                                doc.asis(question[i])
+                                continue
+                        doc.asis(question[i])
+            doc.asis('<img src="defaultblack.png"/>')
+
+
+def main():
+
+    questions, answers = [], []
+
+    load_cards('a.csv', answers)
+    load_cards('q.csv', questions)
+
+    tasks = {
+        "answers-back": partial(generate_back, isQuestions=False),
+        "answers-front": partial(generate_front_answers, answers=answers),
+        "questions-back": partial(generate_back, isQuestions=True),
+        "questions-front": partial(generate_front_questions, questions=questions)
+    }
+
+    for key in tasks:
+        doc = Doc()
+        doc.asis('<!DOCTYPE html>')
+        with doc.tag('html'):
+            with doc.tag('head'):
+                doc.asis('<link rel="stylesheet" href="style.css"/>')
+            with doc.tag('body'):
+                tasks[key](doc=doc)
+        with open('design/index.html', 'w+', encoding='utf-8') as f:
+            f.write(doc.getvalue())
+
+        pdfkit.from_file('design\\index.html', f'{key}.pdf', options={'--zoom': 1.24, '--margin-bottom': '0', '--margin-top': '0', '--margin-left': '0',
+                                                                      '--margin-right': '0', '--enable-local-file-access': None, '--page-width': '60mm', '--page-height': '90mm', '--encoding': 'utf-8'})
+
+
+if __name__ == "__main__":
+    main()

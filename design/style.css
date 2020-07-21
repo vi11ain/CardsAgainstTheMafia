@@ -8,6 +8,7 @@
 }
 **/
 
+/**
 @font-face {
   font-family: Heebo-Regular;
   src: url(Heebo-Regular.ttf);
@@ -17,10 +18,11 @@
   font-family: Heebo;
   src: url(Heebo-VariableFont_wght.ttf);
 }
+**/
 
 body {
   direction: rtl;
-  font-family: Heebo-Regular;
+  /*font-family: Heebo-Regular;*/
   margin: 0;
   padding: 0;
 }
@@ -28,27 +30,36 @@ body {
 .card {
   page-break-before: always;
   position: relative;
-  height: 90mm;
-  width: 60.2mm;
+  height: 90.5mm;
+  width: 60.4mm;
+  text-align: right;
+  padding: 20px;
+  box-sizing: border-box;
+  font: 19px helvetica;
+  line-height: 24px;
+  font-weight: 700;
+  display: inline-block;
+  vertical-align: top;
 }
 
-.question {
-  background: black;
-  color: white;
+.black {
+  color: #fff;
+  background-color: #000;
 }
 
-p {
-  position: absolute;
-  top: -2.5mm;
-  right: 6mm;
-  font-size: 25px;
-  margin-left: 6mm;
-  line-height: 1;
+.placeholder {
+  border-bottom: 1px solid #fff;
+  height: 20px;
+  width: 100px;
+  margin-right: 2px;
+  display: inline-block;
 }
 
-.card-back-title {
-  top: -6.3mm !important;
-  font-family: Heebo;
+.nowrap {
+  white-space: nowrap;
+}
+
+.title {
   letter-spacing: -3px !important;
   line-height: 0.9 !important;
   font-weight: 600;
@@ -56,7 +67,6 @@ p {
 }
 
 img {
-  content: url(default.png);
   width: 12mm;
   position: absolute;
   bottom: 5mm;
